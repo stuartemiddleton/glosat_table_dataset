@@ -24,6 +24,10 @@ Data sourced for a total of 500 annotated images. Original images sourced with p
 | WR_Devon_Extern; UK; 1890s to 1940s | 33 / 33/ 33 | Mixed; Bordered |
 | Total | 500 / 710 / 573 | |
 
+This work can be cited as:
+
+Ziomek. J. Middleton, S.E. GloSAT Historical Measurement Table Dataset: Enhanced Table Structure Recognition Annotation for Downstream Historical Data Rescue, 6th International Workshop on Historical Document Imaging and Processing (HIP-2021), Sept 5-6, 2021, Lausanne, Switzerland
+
 A pre-print of the HIP-2021 paper can be found on the authors website https://www.southampton.ac.uk/~sem03/HIP_2021.pdf
 
 This work is part of the GloSAT project https://www.glosat.org/ and supported by the Natural Environment Research Council (NE/S015604/1). The authors acknowledge the use of the IRIDIS High Performance Computing Facility, and associated support services at the University of Southampton, in the completion of this work.
