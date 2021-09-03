@@ -11,9 +11,8 @@ A snapshot release of the github site can also be downloaded from Zendo.
 
 Data sourced for a total of 500 annotated images. Original images sourced with permission from UK Met Office, US NOAA and weatheerrescue.org (University of Reading).
 
-| Data | Numbers | Style |
-| ---- | ------- | ----- |
 | Source ID; Region; Timeframe | Images / Tables / Headers | Page Style; Table Style |
+| ---------------------------- | ------------------------- | ----------------------- |
 | 20cr_DWR_MO; India; 1970s | 24 / 31 / 31 | Printed; Borderless |
 | 20cr_DWR_NOAA; India; 1930s | 24 / 24 / 24 | Printed; Semi-bordered |
 | 20cr_Kubota; Philippines; 1900s | 24 / 28 / 28 | Printed; Semi-bordered |
@@ -29,7 +28,7 @@ A pre-print of the HIP-2021 paper can be found on the authors website https://ww
 
 This work is part of the GloSAT project https://www.glosat.org/ and supported by the Natural Environment Research Council (NE/S015604/1). The authors acknowledge the use of the IRIDIS High Performance Computing Facility, and associated support services at the University of Southampton, in the completion of this work.
 
-# installation under Ubuntu 20.04LTS
+# Installation under Ubuntu 20.04LTS
 
 ```
 cd /data/glosat_table_dataset
@@ -106,7 +105,9 @@ unzip WR_10_years.zip
 unzip WR_Devon_Extern.zip
 ```
 
-# train models (if not using available pretrained model checkpoints)
+# Train models
+
+This is only needed if you are not using the available pretrained model checkpoints.
 
 ```
 cd /data/glosat_table_dataset/mmdetection
@@ -235,7 +236,9 @@ To use them simply change the 'type' key value in model dictonary ('model = dict
 The type string should be changed to either 'CascadeRCNNFrozen' or 'CascadeRCNNFrozenRPN'.
 
 
-# infer and evaluate using models (both available pretrained models and ones trained using previous section)
+# Infer and evaluate using models
+
+Commands provided for using both the available pretrained models and ones trained using previous section.
 
 ```
 cd /data/glosat_table_dataset/mmdetection
@@ -471,7 +474,9 @@ For pretrained models (B1 and B2):
 --raw_cells will skip all post-processing on cells (if not given, post-processing is applied, by default pp is used)
 --skip_headers will only segment table bodies, if not given whole tables (inlc. headers) are segmented (by default headers are segmented)
 
-# Latest eval results (same model checkpoints as used in HIP 2021 paper but with small improvements to post processing code)
+# Latest eval results
+
+These results use the same model checkpoints as used for the HIP 2021 paper but with latest small improvements to post processing code.
 
 Table Detection
 
