@@ -10,6 +10,9 @@ Dataset and model checkpoint files can be downloaded from Zendo. Dataset files s
 A snapshot release of the github site can also be downloaded from Zendo.
 
 Data sourced for a total of 500 annotated images. Original images sourced with permission from UK Met Office, US NOAA and weatheerrescue.org (University of Reading).
+
+| Data | Numbers | Style |
+| ---- | ------- | ----- |
 | Source ID; Region; Timeframe | Images / Tables / Headers | Page Style; Table Style |
 | 20cr_DWR_MO; India; 1970s | 24 / 31 / 31 | Printed; Borderless |
 | 20cr_DWR_NOAA; India; 1930s | 24 / 24 / 24 | Printed; Semi-bordered |
@@ -471,13 +474,17 @@ For pretrained models (B1 and B2):
 # Latest eval results (same model checkpoints as used in HIP 2021 paper but with small improvements to post processing code)
 
 Table Detection
+
 | Model | Precision | Recall | F1 |
+| ----- | --------- | ------ | -- |
 | CascadeTabNet original (no fine tuning) | 0.97 | 1.0 | 0.98 |
 | CascadeTabNet + fine tuning on (full table) | 1.0 | 1.0 | 1.0 |
 | CascadeTabNet + fine tuning on (full table, header, caption) | 1.0 | 1.0 | 1.0 |
 
 Table Structure Recognition
+
 | Model | Automated Table Detection | Weighted Average F1 Score | Row F1 Score | Col F1 Score |
+| ----- | ------------------------- | ------------------------- | ------------ | ------------ |
 | GloSAT (coarse segmentation cells) CascadeTabNet + post-processing | Yes | 0.74 | 0.87 | 0.95 |
 | GloSAT (coarse segmentation cells) CascadeTabNet + post-processing | No | 0.75 | 0.87 | 0.95 |
 | GloSAT (coarse segmentation cells) CascadeTabNet | Yes | 0.37 | | |
