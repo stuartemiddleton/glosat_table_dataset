@@ -195,14 +195,12 @@ nano dla/config/cascadeRCNN_ignore_all_but_cells.py
 	# do less epochs for testing
 nohup python3 tools/train.py dla/config/cascadeRCNN_ignore_all_but_cells.py --work_dir /data/glosat_table_dataset/dla_models/model_table_struct_coarse_train > /data/glosat_table_dataset/mmdetection/dla_train.log 2>&1 &
 
-# FROM HERE
-
 la -la /data/glosat_table_dataset/dla_models/model_table_struct_coarse_train/*.pth
 cp /data/glosat_table_dataset/dla_models/model_table_struct_coarse_train/epoch_601.pth /data/glosat_table_dataset/dla_models/model_table_struct_coarse_train/best_model.pth
 rm /data/glosat_table_dataset/dla_models/model_table_struct_coarse_train/epoch_*.pth
 
 
-# Table Structure Recognition Model >> individual cells
+# Table Structure Recognition Model >> individual cells (needs reduced memory model)
 cd /data/glosat_table_dataset/mmdetection
 conda activate open-mmlab
 
@@ -219,6 +217,7 @@ nano dla/config/cascadeRCNN_ignore_all_but_cells.py
 	resume_from = None
 	total_epochs = 601
 	# do less epochs for testing
+	type='CascadeRCNNFrozenRPN'
 nohup python3 tools/train.py dla/config/cascadeRCNN_ignore_all_but_cells.py --work_dir /data/glosat_table_dataset/dla_models/model_table_struct_fine_train > /data/glosat_table_dataset/mmdetection/dla_train.log 2>&1 &
 
 la -la /data/glosat_table_dataset/dla_models/model_table_struct_fine_train/*.pth
