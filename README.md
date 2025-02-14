@@ -65,12 +65,16 @@ git clone --branch v1.2.0 https://github.com/open-mmlab/mmdetection.git
 cd /data/glosat_table_dataset/mmdetection
 python3 -m pip install --user -r requirements/optional.txt
 rm -rf build
+python3 -m pip install --user pillow==6.2.1
 python3 setup.py install --user
 python3 setup.py develop --user
 python3 -m pip install --user -r "requirements.txt"
-python3 -m pip install --user pillow==6.2.1
 python3 -m pip install --user mmcv==0.4.3
-python3 -m pip install --user sklearn
+
+# In case, sklearn is not able to install use the following command
+# export SKLEARN_ALLOW_DEPRECATED_SKLEARN_PACKAGE_INSTALL=True
+python3 -m pip install --user sklearn #scikit-learn
+
 python3 -m pip install --user pycocotools
 
 # manually install the mmcv model file hrnetv2_w32-dc9eeb4f.pth as later versions of mmcv have changed the download link from AWS to aliyun cloud provider (so it breaks on download from old AWS link)
