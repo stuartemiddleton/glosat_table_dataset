@@ -1,4 +1,6 @@
 ## GloSAT Historical Measurement Table Dataset
+[![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
+
 Dataset containing scanned historical measurement table documents from ship logs and land measurement stations. Annotations provided in this dataset are designed to allow finergrained table detection and table structure recognition models to be trained and tested. Annotations are region boundaries for tables, cells, headings, headers and captions.
 
 This dataset release includes code to train models on a training split, to use trained model checkpoints for inference and to evaluate interred results on a test split. Pretrained models used in the published HIP-2021 paper are included in the dataset so results can be easily reproduced without training the model checkpoints yourself.
@@ -65,16 +67,12 @@ git clone --branch v1.2.0 https://github.com/open-mmlab/mmdetection.git
 cd /data/glosat_table_dataset/mmdetection
 python3 -m pip install --user -r requirements/optional.txt
 rm -rf build
-python3 -m pip install --user pillow==6.2.1
 python3 setup.py install --user
 python3 setup.py develop --user
 python3 -m pip install --user -r "requirements.txt"
+python3 -m pip install --user pillow==6.2.1
 python3 -m pip install --user mmcv==0.4.3
-
-# In case, sklearn is not able to install use the following command
-# export SKLEARN_ALLOW_DEPRECATED_SKLEARN_PACKAGE_INSTALL=True
-python3 -m pip install --user sklearn #scikit-learn
-
+python3 -m pip install --user sklearn
 python3 -m pip install --user pycocotools
 
 # manually install the mmcv model file hrnetv2_w32-dc9eeb4f.pth as later versions of mmcv have changed the download link from AWS to aliyun cloud provider (so it breaks on download from old AWS link)
@@ -454,14 +452,78 @@ python3 dla/src/eval_ICDAR_wF1.py /data/glosat_table_dataset/dla_results/trained
 python3 dla/src/eval_ICDAR.py /data/glosat_table_dataset/dla_results/trained_model_fine_table_struct /data/glosat_table_dataset/datasets/Test/Fine/ICDAR --IoU_threshold 0.5
 python3 dla/src/eval_rows_n_cols_only.py /data/glosat_table_dataset/dla_results/trained_model_fine_table_struct /data/glosat_table_dataset/datasets/Test/Fine/ICDAR --IoU_threshold 0.5
 
+```
+# Semi-supervised table structure recognition study:
+This study addresses two key research questions:
+- Can a semi-supervised training approach reduce the need for expensive data annotations?
+- Does semi-supervised training improve model robustness?
 
+By combining labeled and unlabeled data, our approach reduces the burden of extensive data annotation while enhancing model accuracy and resilience to the variability found in historical documents. This contributes to the scalable and efficient digitization of historical tabular data for climate research and analysis.
+### Key Features:
+- Utilizes labeled data for initial training.
+- Incorporates weak annotations from unlabeled data to iteratively improve performance.
 
+Refer to the [heuristics based cell generation flowchart](heuristics-based-cell-generation.pdf) for a detailed pipeline overview.
+
+## Heuristics-Based Table Cell Generation
+
+We implemented a heuristics-based approach to improve table cell segmentation, especially for historical documents with irregular layouts.
+### Key Heuristics:
+- Centroid Analysis: Using X and Y centroids to detect cell boundaries.
+- Grid Alignment: Dynamic grid generation based on detected lines and whitespace.
+- Noise Reduction: Filtering out spurious detections in noisy document scans.
+
+Inference code to perform table structure recognition using heuristics-based approach:
+```bash
+bash tsr-inference-folder.sh <new_unseen_image_dir> <output_dir>
+
+# Example
+bash dla/src/tsr-inference-folder.sh new_dataset/Images new_dataset/Heuristics_annotation
 ```
 
+## Example of Heuristic-based table cell generation
+![Heuristic-based table cell generation](examples/heuristics_cell_generation.gif)
+
+## Semi-supervised finetuning
+After generating table cells using the heuristic-based approach, the output is used to fine-tune the model for improved performance on unseen data.
+
+To prepare the newly generated data for fine-tuning:  
+1. Copy `model_table_struct_fine_train` to `model_table_struct_fine_semisupervised_train` for semi-supervised training.    
+2. Copy the new unseen images to the `dla_models/model_table_struct_fine_semisupervised_train/VOC2007/JPEGImages` folder. *You may manually review and select only the images where table cell alignments have been correctly predicted before copying them.*  
+3. Update the list of new selected images to the `dla_models/model_table_struct_fine_semisupervised_train/VOC2007/ImageSets/main.txt`  
+4. Copy the corresponding generated XML annotation files to the `dla_models/model_table_struct_fine_semisupervised_train/VOC2007/Annotations` folder.
+5. Run the training command to fine-tune the model
+
+```bash
+# Example 
+
+# Copy the new unseen images to the Training folder 
+cp new_dataset/Images/* dla_models/model_table_struct_fine_semisupervised_train/VOC2007/JPEGImages/. 
+
+# Copy the new VOC format xml files generated to the Training folder
+cp new_dataset/Heuristics_annotation/XML-det/*.xml dla_models/model_table_struct_fine_semisupervised_train/VOC2007/Annotations/.
+
+# Update the cascadeRCNN_ignore_all_but_cells.py for the model path and epochs
+nano dla/config/cascadeRCNN_ignore_all_but_cells.py
+	model_dir='/data/glosat_table_dataset/dla_models/model_table_struct_fine_semisupervised_train'
+	resume_from = None
+	total_epochs = 601
+	# do less epochs for testing
+	type='CascadeRCNNFrozenRPN'
+
+# Re-train the model [Change the path to corresponding location]
+nohup python3 tools/train.py dla/config/cascadeRCNN_ignore_all_but_cells.py --work_dir dla_models/model_table_struct_fine_semisupervised_train > mmdetection/dla_train.log 2>&1 &
+
+# Or you can resume training from a previously trained model
+nohup python3 tools/train.py dla/config/cascadeRCNN_ignore_all_but_cells.py --work_dir dla_models/model_table_struct_fine_semisupervised_train --resume_from dla_models/model_table_struct_fine_train/epoch_601.pth --total_epochs 1202 > mmdetection/dla_train.log 2>&1 &
+```
+
+## Inference
 Three scripts exist for inference:
 - inference_original.py - for original model (original)
 - inference.py - for pretrained model (B2)
 - inference_regiongiven.py - for pretrained with table region given explicitly (B1)
+- TSR-inference.py - for heuristics based new candidate table cell generation. 
 
 For (original) and (B2), the first argument is the checkpoint file for model used to predict tables.
 For region_given (B1), the first argument is path to folder with VOC annotations to read table regions from
