@@ -28,9 +28,9 @@ Data sourced for a total of 500 annotated images. Original images sourced with p
 
 This work can be cited as:
 
-Ziomek. J. Middleton, S.E. GloSAT Historical Measurement Table Dataset: Enhanced Table Structure Recognition Annotation for Downstream Historical Data Rescue, 6th International Workshop on Historical Document Imaging and Processing (HIP-2021), Sept 5-6, 2021, Lausanne, Switzerland
+- Singh, L.G., Middleton, S.E. Data rescue of historical tables through semi-supervised table structure recognition. International Journal on Document Analysis and Recognition (IJDAR) 2025. https://doi.org/10.1007/s10032-025-00562-6
 
-A pre-print of the HIP-2021 paper can be found on the authors website https://www.southampton.ac.uk/~sem03/HIP_2021.pdf
+- Ziomek. J. Middleton, S.E. GloSAT Historical Measurement Table Dataset: Enhanced Table Structure Recognition Annotation for Downstream Historical Data Rescue, 6th International Workshop on Historical Document Imaging and Processing (HIP-2021), Sept 5-6, 2021, Lausanne, Switzerland. A pre-print of the HIP-2021 paper can be found on the authors website https://www.southampton.ac.uk/~sem03/HIP_2021.pdf
 
 This work is part of the GloSAT project https://www.glosat.org/ and supported by the Natural Environment Research Council (NE/S015604/1). The authors acknowledge the use of the IRIDIS High Performance Computing Facility, and associated support services at the University of Southampton, in the completion of this work.
 
